@@ -6,6 +6,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 
 # Install packages:
+choco install powershell-core -y
 choco install git -y
 choco install gh -y
 choco install vscode -y
@@ -50,7 +51,11 @@ Copy-Item "~\Downloads\config_files\windows\PowerShell\takuya.omp.json.bak" "~\D
 Copy-Item "~\Downloads\config_files\windows\Terminal\settings.json" "~\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 Copy-Item "~\Downloads\config_files\windows\PowerToys\KeyboardManager\default.json" "~\AppData\Local\Microsoft\PowerToys\Keyboard Manager\default.json"
 Copy-Item "~\Downloads\config_files\windows\PowerToys\settings.json" "~\AppData\Local\Microsoft\PowerToys\settings.json"
+
 Remote-Item "~\Downloads\config_files" -Recurse -Force
+
+Stop-Process -Name "PowerToys" -Force
+Start-Porcess -FilePath "C:\Program Files\PowerToys\PowerToys.exe"
 
 # Node package managers:
 npm install -g npm 
@@ -60,3 +65,18 @@ iwr https://get.pnpm.io/install.ps1 -useb | iex
 # Python package managers:
 pip install --user pipenv
 
+# WSL installation Ubuntu:
+# . .\setupWindowsWSL.ps1
+# $response = Read-Host "Do you want to continue? (y/n)"
+# if ($response -eq "y") {
+#     Write-Host "You chose Yes. Continuing..."
+#       install-wsl-ubuntu
+# }
+# elseif ($response -eq "n") {
+#     Write-Host "You chose No. Exiting..."
+# }
+# else {
+#     Write-Host "Invalid response. Please answer with 'Yes' or 'No'."
+# }
+#
+#
