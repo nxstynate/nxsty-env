@@ -1,0 +1,19 @@
+Dev. Environment:
+
+CG Production Environment:
+3D Studio Max
+- standard start scene
+- soulburn scripts
+- relink bitmaps
+- relink missing maps
+- vray
+- material editor materials
+- preferences
+  - keyboard shortcuts
+  - hot menus
+
+Adobe Creative Suite
+Blender
+Unreal Engine
+
+Music Production Environment:
