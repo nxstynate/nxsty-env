@@ -1,5 +1,12 @@
 # PowerShell setup script for development environment
 
+# Refresh environment variables.
+function Restart-Environment
+{
+  $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+}
+
+
 # Set execution policy for this session
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
@@ -40,6 +47,8 @@ foreach ($package in $chocoPackages)
   choco install $package -y
 }
 
+Restart-Environment
+
 # Install packages using winget
 $wingetPackages = 'Microsoft.WindowsTerminal', 'Microsoft.PowerToys', 'JanDeDobbeleer.OhMyPosh', 
 'Google.Chrome', 'Mozilla.Firefox'
@@ -48,12 +57,16 @@ foreach ($app in $wingetPackages)
   winget install --id=$app --silent 
 }
 
+Restart-Environment
+
 # Install PowerShell modules
 $psModules = 'terminal-icons', 'PSReadLine', 'posh-git', 'PSFzf', 'z'
 foreach ($module in $psModules)
 {
   Install-Module -Name $module -Scope CurrentUser -Force 
 }
+
+Restart-Environment
 
 # Clone and configure LazyVim
 git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\nvim
@@ -106,4 +119,10 @@ pip install --user pipenv
 # else {
 #     Write-Host "Invalid response. Please answer with 'Yes' or 'No'."
 # }
+
+Pause
+
+
+
+
 
