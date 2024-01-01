@@ -1,4 +1,7 @@
 Dev. Environment:
+- Fixed some errors in the script need to add some items to the PATH so that things will execute right. 
+  - Powershell setup does not work right  you get an error 
+  - Pipenv does not work right.
 
 CG Production Environment:
 3D Studio Max

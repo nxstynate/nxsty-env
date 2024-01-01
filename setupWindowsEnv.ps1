@@ -1,44 +1,66 @@
-# Set execution policy for the session
-Set-ExecutionPolicy Bypass -Scope Process -Force
-Set-ExecutionPolicy RemoteSigned
+# PowerShell setup script for development environment
 
-# Install package managers
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+# Set execution policy for this session
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# Install NuGet provider for PowerShell
+try
+{
+  Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+} catch
+{
+  Write-Error "Failed to install NuGet provider."
+  exit
+}
+
+# Install Chocolatey and Scoop
+try
+{
+  [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+  if (-not (Get-Command "choco" -ErrorAction SilentlyContinue))
+  {
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  }
+  if (-not (Test-Path "~\scoop"))
+  {
+    Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+  }
+} catch
+{
+  Write-Error "Failed to install Chocolatey and/or Scoop."
+  exit
+}
 
 # Install packages using Chocolatey
-$packages = 'winget', 'powershell-core', 'git', 'gh', 'vscode', 'nodejs.install', 'fzf', 'neovim', 'ripgrep', 
+$chocoPackages = 'winget', 'powershell-core', 'git', 'gh', 'vscode', 'nodejs.install', 'fzf', 'neovim', 'ripgrep', 
 'lazygit', 'bat', 'fd', 'mingw', 'cmake', 'llvm', 'python', 'pyenv-win', 'nerd-fonts-JetBrainsMono', 
 'nerd-fonts-Hack'
-foreach ($package in $packages)
+foreach ($package in $chocoPackages)
 {
   choco install $package -y
 }
-
-# Install NuGet provider for Powershell
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser
 
 # Install packages using winget
 $wingetPackages = 'Microsoft.WindowsTerminal', 'Microsoft.PowerToys', 'JanDeDobbeleer.OhMyPosh', 
 'Google.Chrome', 'Mozilla.Firefox'
 foreach ($app in $wingetPackages)
 {
-  winget install -e --id=$app -a
+  winget install --id=$app --silent 
 }
 
 # Install PowerShell modules
-$modules = 'terminal-icons', 'PSReadLine', 'posh-git', 'oh-my-posh', 'PSFzf', 'z'
-foreach ($module in $modules)
+$psModules = 'terminal-icons', 'PSReadLine', 'posh-git', 'PSFzf', 'z'
+foreach ($module in $psModules)
 {
-  Install-Module -Name $module -Scope CurrentUser -Force
+  Install-Module -Name $module -Scope CurrentUser -Force 
 }
 
-# Install LazyVim Config
+# Clone and configure LazyVim
 git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\nvim
 Remove-Item $env:LOCALAPPDATA\nvim\.git -Recurse -Force
 
-git clone https://github.com/nxstynate/config_files ~\Downloads
+# Clone user configuration files
+git clone https://github.com/nxstynate/config_files $env:USERPROFILE\Downloads\config_files
 
 # Configuration settings for PowerShell and Terminal
 $configSource = "$env:USERPROFILE\Downloads\config_files"
@@ -47,13 +69,13 @@ $powerShellConfigSource = "$configSource\windows\PowerShell\*"
 $terminalConfigSource = "$configSource\windows\Terminal\settings.json"
 $powerToysConfigSource = "$configSource\windows\PowerToys\*"
 
-# Copy items to their respective locations
+# Copy configuration files to respective locations
 Copy-Item $nvimConfigSource "$env:LOCALAPPDATA\nvim\." -Force -Recurse
 Copy-Item $powerShellConfigSource "$env:USERPROFILE\Documents\PowerShell\" -Force -Recurse
 Copy-Item $terminalConfigSource "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Force -Recurse
 Copy-Item $powerToysConfigSource "$env:LOCALAPPDATA\Microsoft\PowerToys\" -Force -Recurse
 
-# Stop and start PowerToys (if installed and running)
+# Restart PowerToys if running
 $powerToysProcess = Get-Process -Name "PowerToys" -ErrorAction SilentlyContinue
 if ($powerToysProcess)
 {
@@ -64,19 +86,19 @@ if ($powerToysProcess)
   Write-Output "PowerToys is not running. Skipping restart."
 }
 
-# Node package managers
+# Install global Node packages
 npm install -g npm yarn
 Invoke-WebRequest https://get.pnpm.io/install.ps1 -useb | Invoke-Expression
 
-# Python package manager
+# Install Python pipenv
 pip install --user pipenv
 
-# WSL installation Ubuntu:
+# Optional WSL installation (commented out)
 # . .\setupWindowsWSL.ps1
 # $response = Read-Host "Do you want to continue? (y/n)"
 # if ($response -eq "y") {
 #     Write-Host "You chose Yes. Continuing..."
-#       install-wsl-ubuntu
+#     install-wsl-ubuntu
 # }
 # elseif ($response -eq "n") {
 #     Write-Host "You chose No. Exiting..."
@@ -84,17 +106,4 @@ pip install --user pipenv
 # else {
 #     Write-Host "Invalid response. Please answer with 'Yes' or 'No'."
 # }
-#
-#
-
-
-
-
-
-
-
-
-
-
-
 
