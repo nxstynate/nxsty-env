@@ -41,7 +41,7 @@ try
 # Install packages using Chocolatey
 $chocoPackages = 'winget', 'powershell-core', 'git', 'gh', 'vscode', 'nodejs.install', 'fzf', 'neovim', 'ripgrep', 
 'lazygit', 'bat', 'fd', 'mingw', 'cmake', 'llvm', 'python', 'pyenv-win', 'nerd-fonts-JetBrainsMono', 
-'nerd-fonts-Hack'
+'nerd-fonts-Hack', 'nerd-fonts-CascadiaMono'
 foreach ($package in $chocoPackages)
 {
   choco install $package -y
@@ -121,6 +121,8 @@ pip install --user pipenv
 # }
 
 Pause
+
+
 
 
 
