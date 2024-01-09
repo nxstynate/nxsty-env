@@ -1,0 +1,10 @@
+---
+- name: Setup Development Environment
+  hosts: localhost
+  connection: local
+  become: yes
+  roles:
+    - role: software_install
+    - role: dotfiles
+# Roles are defined in separate directories within the repository
+

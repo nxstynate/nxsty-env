@@ -1,9 +1,0 @@
----
-- name: Install Hexlix Text Editor
-  hosts: local
-  become: yes
-  tasks:
-    - name: Install Helix
-      apt:
-        name: helix
-        state: present
