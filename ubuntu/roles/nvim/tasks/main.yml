@@ -14,7 +14,7 @@
 
 - name: Copy Neovim Configuration Files
   copy:
-    src: "~/config_files/neovim/nvim/*"
-    dest: "/files/."
+    src: "../../../dotfiles/.config/nvim/*"
+    dest: "~/.config/nvim/."
     mode: "0644"
   when: git_clone.changed

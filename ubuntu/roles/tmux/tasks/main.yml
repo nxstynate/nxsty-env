@@ -1,0 +1,20 @@
+---
+- name: Install TMux
+  apt:
+    name: tmux
+    state: present
+
+- name: Clone TMux Config Repository
+  git:
+    repo: "https:github.com/nxstynate/config_files"
+    dest: "~/."
+    version: "main" # or any other branch/tag
+    force: yes # Use force to ensure the latest version is pulled
+  register: git_clone
+
+- name: Copy TMux Configuration Files
+  copy:
+    src: "../../../dotfiles/.config/nvim/*"
+    dest: "/files/."
+    mode: "0644"
+  when: git_clone.changed
