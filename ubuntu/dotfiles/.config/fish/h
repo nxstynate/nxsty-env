@@ -1,0 +1,79 @@
+
+fish - the friendly interactive shell
+
+ffiisshh [_O_P_T_I_O_N_S] [_F_I_L_E [_A_R_G ...]]
+ffiisshh [_O_P_T_I_O_N_S] [--cc _C_O_M_M_A_N_D [_A_R_G ...]]
+
+DDEESSCCRRIIPPTTIIOONN
+ffiisshh  is  a  command-line shell written mainly with interactive use in mind.  This page briefly describes the options for invoking ffiisshh.  The _f_u_l_l _m_a_n_u_a_l is available in HTML by using
+the hheellpp command from inside fish, and in the _f_i_s_h_-_d_o_c_(_1_) man page.  The _t_u_t_o_r_i_a_l is available as HTML via hheellpp ttuuttoorriiaall or in _m_a_n _f_i_s_h_-_t_u_t_o_r_i_a_l.
+
+The following options are available:
+
+--cc or ----ccoommmmaanndd==CCOOMMMMAANNDD
+       Evaluate the specified commands instead of reading from the commandline, passing additional positional arguments through $$aarrggvv.
+
+--CC or ----iinniitt--ccoommmmaanndd==CCOOMMMMAANNDDSS
+       Evaluate specified commands after reading the configuration but before executing command specified by --cc or reading interactive input.
+
+--dd or ----ddeebbuugg==DDEEBBUUGG__CCAATTEEGGOORRIIEESS
+       Enables debug output and specify a pattern for matching debug categories.  See _D_e_b_u_g_g_i_n_g below for details.
+
+--oo or ----ddeebbuugg--oouuttppuutt==DDEEBBUUGG__FFIILLEE
+       Specifies a file path to receive the debug output, including categories and  _f_i_s_h___t_r_a_c_e.  The default is stderr.
+
+--ii or ----iinntteerraaccttiivvee
+       The shell is interactive.
+
+--ll or ----llooggiinn
+       Act as if invoked as a login shell.
+
+--NN or ----nnoo--ccoonnffiigg
+       Do not read configuration files.
+
+--nn or ----nnoo--eexxeeccuuttee
+       Do not execute any commands, only perform syntax checking.
+
+--pp or ----pprrooffiillee==PPRROOFFIILLEE__FFIILLEE
+       when ffiisshh exits, output timing information on all executed commands to the specified file.  This excludes time spent starting up and reading the configuration.
+
+----pprrooffiillee--ssttaarrttuupp==PPRROOFFIILLEE__FFIILLEE
+       Will write timing for ffiisshh startup to specified file.
+
+--PP or ----pprriivvaattee
+       Enables _p_r_i_v_a_t_e _m_o_d_e: ffiisshh will not access old or store new history.
+
+----pprriinntt--rruussaaggee--sseellff
+       When ffiisshh exits, output stats from getrusage.
+
+----pprriinntt--ddeebbuugg--ccaatteeggoorriieess
+       Print all debug categories, and then exit.
+
+--vv or ----vveerrssiioonn
+       Print version and exit.
+
+--ff or ----ffeeaattuurreess==FFEEAATTUURREESS
+       Enables one or more comma-separated _f_e_a_t_u_r_e _f_l_a_g_s.
+
+The ffiisshh exit status is generally the _e_x_i_t _s_t_a_t_u_s _o_f _t_h_e _l_a_s_t _f_o_r_e_g_r_o_u_n_d _c_o_m_m_a_n_d.
+
+DDEEBBUUGGGGIINNGG
+While fish provides extensive support for _d_e_b_u_g_g_i_n_g _f_i_s_h _s_c_r_i_p_t_s, it is also possible to debug and instrument its internals.  Debugging can be enabled by passing the  ----ddeebbuugg  option.
+For example, the following command turns on debugging for background IO thread events, in addition to the default categories, i.e. _d_e_b_u_g, _e_r_r_o_r, _w_a_r_n_i_n_g, and _w_a_r_n_i_n_g_-_p_a_t_h:
+
+   > fish --debug=iothread
+
+Available  categories  are  listed  by ffiisshh ----pprriinntt--ddeebbuugg--ccaatteeggoorriieess. The ----ddeebbuugg option accepts a comma-separated list of categories, and supports glob syntax.  The following command
+turns on debugging for _c_o_m_p_l_e_t_e, _h_i_s_t_o_r_y, _h_i_s_t_o_r_y_-_f_i_l_e, and _p_r_o_f_i_l_e_-_h_i_s_t_o_r_y, as well as the default categories:
+
+   > fish --debug='complete,*history*'
+
+Debug messages output to stderr by default. Note that if _f_i_s_h___t_r_a_c_e is set, execution tracing also outputs to stderr by default. You can output to a file using the ----ddeebbuugg--oouuttppuutt  op‐
+tion:
+
+   > fish --debug='complete,*history*' --debug-output=/tmp/fish.log --init-command='set fish_trace on'
+
+These  options can also be changed via the _F_I_S_H___D_E_B_U_G and _F_I_S_H___D_E_B_U_G___O_U_T_P_U_T variables.  The categories enabled via ----ddeebbuugg are _a_d_d_e_d to the ones enabled by $FISH_DEBUG, so they can be
+disabled by prefixing them with -- (rreeaaddeerr--**,,--aasstt** enables reader debugging and disables ast debugging).
+
+The file given in ----ddeebbuugg--oouuttppuutt takes precedence over the file in _F_I_S_H___D_E_B_U_G___O_U_T_P_U_T.

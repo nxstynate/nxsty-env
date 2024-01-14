@@ -1,0 +1,20 @@
+---
+- name: Install Git
+  apt:
+    name: git
+    state: present
+
+- name: Clone Git Config Repository
+  git:
+    repo: "https:github.com/nxstynate/config_files"
+    dest: "~/."
+    version: "main" # or any other branch/tag
+    force: yes # Use force to ensure the latest version is pulled
+  register: git_clone
+
+- name: Copy Git Configuration Files
+  copy:
+    src: "~/config_files/neovim/nvim/*"
+    dest: "/files/."
+    mode: "0644"
+  when: git_clone.changed

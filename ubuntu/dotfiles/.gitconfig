@@ -1,0 +1,17 @@
+[user]
+	name = Nate Lewis
+	email = nathanael.paul.lewis@gmail.com
+[core]
+	editor = nvim
+	autocrif = input
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = "code --wait --diff $LOCAL $REMOTE"
+[alias]
+	lg = log --pretty=format:'%an comitted %h'
+[credential]
+	credentialStore = gpg
+	helper = cache --timeout=28800
+[color]
+	ui = auto
