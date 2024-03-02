@@ -50,7 +50,7 @@ foreach ($package in $chocoPackages)
 Restart-Environment
 
 # Install packages using winget
-$wingetPackages = 'Microsoft.WindowsTerminal', 'Microsoft.PowerToys', 'JanDeDobbeleer.OhMyPosh', 
+$wingetPackages = 'Microsoft.WindowsTerminal', 'Microsoft.PowerToys', 'JanDeDobbeleer.OhMyPosh', 'starship',
 'Google.Chrome', 'Mozilla.Firefox'
 foreach ($app in $wingetPackages)
 {
@@ -81,12 +81,15 @@ $nvimConfigSource = "$configSource\neovim\nvim_devaslife_2024\*"
 $powerShellConfigSource = "$configSource\windows\PowerShell\*"
 $terminalConfigSource = "$configSource\windows\Terminal\settings.json"
 $powerToysConfigSource = "$configSource\windows\PowerToys\*"
+$starshipConfigSource = "$configSource\windows\starship.toml"
+
 
 # Copy configuration files to respective locations
 Copy-Item $nvimConfigSource "$env:LOCALAPPDATA\nvim\." -Force -Recurse
 Copy-Item $powerShellConfigSource "$env:USERPROFILE\Documents\PowerShell\" -Force -Recurse
 Copy-Item $terminalConfigSource "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Force -Recurse
 Copy-Item $powerToysConfigSource "$env:LOCALAPPDATA\Microsoft\PowerToys\" -Force -Recurse
+Copy-Item $starshipConfigSource "$HOME\example\non\default\path\starship.toml" -Force -Recurse
 
 # Restart PowerToys if running
 $powerToysProcess = Get-Process -Name "PowerToys" -ErrorAction SilentlyContinue
