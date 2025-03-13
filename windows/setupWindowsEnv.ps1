@@ -68,6 +68,16 @@ foreach ($module in $psModules)
 
 Restart-Environment
 
+$scoopModules = 'zoxide'
+foreach ($module in $scoopModules)
+{
+    scoop install $module --no-cache -q
+  }
+
+Restart-Environment
+
+
+
 # Clone and configure LazyVim
 git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\nvim
 Remove-Item $env:LOCALAPPDATA\nvim\.git -Recurse -Force
