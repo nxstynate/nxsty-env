@@ -60,7 +60,7 @@ foreach ($app in $wingetPackages)
 Restart-Environment
 
 # Install PowerShell modules
-$psModules = 'terminal-icons', 'PSReadLine', 'posh-git', 'PSFzf', 'z'
+$psModules = 'terminal-icons', 'PSReadLine', 'posh-git', 'PSFzf', 
 foreach ($module in $psModules)
 {
   Install-Module -Name $module -Scope CurrentUser -Force 
